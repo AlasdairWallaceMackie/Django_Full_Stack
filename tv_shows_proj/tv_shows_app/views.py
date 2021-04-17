@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from .models import *
+from django.contrib import messages
 
 def index(request):
     return redirect('/shows')
@@ -29,6 +30,12 @@ def template_edit_show(request, id):
     return render(request, 'edit_show.html', context)
 
 def db_add_show(request):
+    errors = Show.objects.basic_validator(request.POST)
+    if errors:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/shows/new')
+
     Show.objects.create(
         title = request.POST['title'],
         network = request.POST['network'],
@@ -38,12 +45,18 @@ def db_add_show(request):
     return redirect('/')
 
 def db_update_show(request, id):
+    errors = Show.objects.basic_validator(request.POST)
     show_to_update = Show.objects.get(id = id)
-    show_to_update.title = request.POST['title']
-    show_to_update.network = request.POST['network']
-    show_to_update.release_date = request.POST['release_date']
-    show_to_update.description = request.POST['description']
-    show_to_update.save()
+    if errors:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f'/shows/{show_to_update.id}/edit')
+    else:
+        show_to_update.title = request.POST['title']
+        show_to_update.network = request.POST['network']
+        show_to_update.release_date = request.POST['release_date']
+        show_to_update.description = request.POST['description']
+        show_to_update.save()
     return redirect(f'/shows/{show_to_update.id}')
 
 def db_delete_show(request, id):

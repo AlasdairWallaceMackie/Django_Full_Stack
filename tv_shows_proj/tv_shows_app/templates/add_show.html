@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -15,6 +17,15 @@
             <a href="/">Go Back</a>
         </div>
 
+        {% if messages %}
+        <div id="messages">
+            <ul>
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         <form action="/shows/create" method="POST">
             {% csrf_token %}
             <label for="title">Title</label>
@@ -38,8 +49,9 @@
             <input type="submit" value="Create">
         </form>
 
-    </div>
 
+    
+    </div>
 
 </body>
 </html>

@@ -12,14 +12,21 @@
     display: flex;
     justify-content: space-between;
 }
-
+#messages{
+    position: fixed;
+    top: 210px;
+    left: 132px;
+    padding: 20px;
+    background-color: beige;
+    box-shadow: 0 0 5px black;
+}
 table, th, td{
     border: 1px solid black;
     border-collapse: collapse;
     padding: 5px;
 }
 thead tr{
-    background-color: gray;
+    background-color: rgb(168, 167, 167);
 }
 tbody tr:nth-child(even){
     background-color: lightgrey;
