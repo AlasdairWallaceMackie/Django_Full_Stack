@@ -5,10 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static style.css %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 <body>
     <div id="wrapper">
+        {% if messages %}
+            <div id="error-messages" class="modal">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
         <form id="add-course" action="/courses/create" method="POST">
             {% csrf_token %}
             <h3>Add a new course</h3>
@@ -19,7 +31,7 @@
             <label for="description">Description:</label><br>
             <textarea name="description" id="description" cols="30" rows="10"></textarea>
             <br>
-            <input type="submit" value="Add">
+            <input class="add-button styled-button" type="submit" value="Add">
         </form>
 
         <div id="table-wrapper">
@@ -41,7 +53,7 @@
                             <td>{{course.created_at}}</td>
                             <td>
                                 <a href="/courses/{{course.id}}">Comments</a>
-                                <a href="/courses/{{course.id}}/destroy">Remove</a>
+                                <a class="remove" course-name="{{course.name}}" course-id="{{course.id}}" href="#">Remove</a>
                             </td>
                         </tr>
                     {% endfor %}

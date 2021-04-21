@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 <body>
-    <h1>{{course.name}}</h1>
-    <p>{{course.description}}</p>
+    <a href="/">HOME PAGE</a>
+    <div id="wrapper">
+        <h1>{{course.name}}</h1>
+        <p>{{course.description}}</p>
+        <br>
+        <h3>Comments</h3>
+        <table>
+            
+        </table>
+    </div>
 
 </body>
 </html>

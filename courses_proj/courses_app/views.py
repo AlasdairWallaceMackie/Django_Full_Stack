@@ -10,17 +10,18 @@ def index(request):
     return render(request, 'index.html', context)
 
 def create_course(request):
-    errors = Course.objects.basic_validator(request.POST)
-    if errors:
-        for key, value in errors.items():
-            messages.error(request, value)
-        return redirect('/')
+    if request.method =='POST':
+        errors = Course.objects.basic_validator(request.POST)
+        if errors:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/')
 
-    new_course = Course.objects.create(
-        name = request.POST['name'],
-    )
-    new_desc = Description(course = new_course, text = request.POST['description'])
-    new_desc.save()
+        new_course = Course.objects.create(
+            name = request.POST['name'],
+        )
+        new_desc = Description(course = new_course, text = request.POST['description'])
+        new_desc.save()
     return redirect('/')
 
 def course_template(request, id):
