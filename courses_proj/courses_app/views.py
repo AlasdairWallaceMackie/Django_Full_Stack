@@ -24,7 +24,7 @@ def create_course(request):
         new_desc.save()
     return redirect('/')
 
-def course_template(request, id):
+def show_course(request, id):
     context = {
         'course': Course.objects.get(id = id)
     }
@@ -34,3 +34,21 @@ def delete_course(request, id):
     course_to_delete = Course.objects.get(id = id)
     course_to_delete.delete()
     return redirect('/')
+
+def create_comment(request, id):
+    errors = Comment.objects.basic_validator(request.POST)
+    if errors:
+        for key, value in errors.items():
+            messages.error(request, value)
+    else:
+        Comment.objects.create(
+            text = request.POST['comment'],
+            course = Course.objects.get(id=id)
+        )
+    return redirect(f'/courses/{id}/')
+
+def delete_comment(request, id, comment_id):
+    comment_to_delete = Comment.objects.get(id=comment_id)
+    comment_to_delete.delete()
+    
+    return redirect(f'/courses/{id}/')

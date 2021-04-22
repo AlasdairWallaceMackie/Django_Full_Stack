@@ -1,5 +1,6 @@
 import re
 from django.db import models
+from django.db.models.fields import DateTimeField
 
 class Course_Manager(models.Manager):
     def basic_validator(self, post_data):
@@ -20,6 +21,18 @@ class Description_Manager(models.Model):
             errors['description_length'] = "Description must be at least 15 characters long"
 
         return errors
+    
+class Comment_Manager(models.Manager):
+    def basic_validator(self, post_data):
+        errors = {}
+
+        if len(post_data['comment']) < 1:
+            errors['empty_comment'] = "Please enter a comment first"
+        
+        if len(post_data['comment']) > 128:
+            errors['comment_too_long'] = "Comment is too long"
+        
+        return errors
 
 
 class Course(models.Model):
@@ -39,3 +52,11 @@ class Description(models.Model):
 
     def __str__(self):
         return self.text
+
+class Comment(models.Model):
+    text = models.TextField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="comments")
+
+    objects = Comment_Manager()
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
