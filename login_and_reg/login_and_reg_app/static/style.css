@@ -17,6 +17,14 @@
     color: green;
 }
 
+.error_row{
+    height: 22px;
+}
+.error{
+    color: red;
+    font-size: 12px;
+}
+
 form{
     width: 285px;
 
@@ -33,7 +41,3 @@ form{
         width: 25%;
         margin-left: 25%;
     }
-
-td{
-    padding: 10px;
-}

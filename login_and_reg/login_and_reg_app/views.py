@@ -7,7 +7,7 @@ import bcrypt
 
 def index(request):
     context = {
-        'all_users': User.objects.all()
+        # 'all_users': User.objects.all()
     }
     if request.session.has_key('current_user_id'):
         request.session['status'] = "logged in"
