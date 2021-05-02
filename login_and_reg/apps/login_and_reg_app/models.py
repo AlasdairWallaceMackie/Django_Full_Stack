@@ -42,8 +42,37 @@ class User(models.Model):
     email = models.CharField(max_length=64)
     password = models.TextField()
     birthday = models.DateField()
-
+    ##Foreign Keys
+        # messages
+        # comments
     objects = User_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class Message(models.Model):
+    user_id = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE)
+    message = models.TextField()
+    ##Foreign Keys
+        # comments
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def post_date(self):
+        return self.created_at.strftime('%B %d, %Y -- %I:%M %p')
+
+    def author_full_name(self):
+        return f"{self.user_id.first_name} {self.user_id.last_name}"
+
+class Comment(models.Model):
+    user_id = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
+    message_id = models.ForeignKey(Message, related_name="comments", on_delete=models.CASCADE)
+    comment = models.TextField()
+    #
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def post_date(self):
+        return self.created_at.strftime('%B %d, %Y -- %I:%M %p')
+
+    def author_full_name(self):
+        return f"{self.user_id.first_name} {self.user_id.last_name}"

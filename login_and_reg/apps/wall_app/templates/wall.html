@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CodingDojo Wall</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h1>CodingDojo Wall</h1>
+            <h4>Welcome, {{current_user.first_name}}</h4>
+            <a href="/logout">log off</a>
+        </div>
+
+        <div id="main_content">
+            <form id="post_message" action="/wall/message" method="POST">
+                {% csrf_token %}
+                <label for="message_field">Post a message</label>
+                <textarea required name="message_field" id="message_field" cols="30" rows="2"></textarea>
+                <input type="submit" class="submit-button blue" value="Post a message">
+            </form>
+
+            <div id="messages_list">
+                {% for message in all_messages %}
+                    <div class="message">
+                        <h4>{{message.author_full_name}} - {{message.post_date}}</h4>
+                        <p>{{message.message}}</p>
+                        
+                        <div class="comments_list">
+                            {% for comment in message.comments.all %}
+                                <div class="comment">
+                                    <strong>{{comment.author_full_name}} - {{comment.post_date}}</strong>
+                                    <p>{{comment.comment}}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <form class="post_comment" action="/wall/comment" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="message_id" value="{{message.id}}">
+                            <label for="comment_field">Post a comment</label>
+                            <br>
+                            <input type="text" required name="comment_field" id="comment_field">
+                            <br>
+                            <input type="submit" class="submit-button green" value="Post a comment">
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

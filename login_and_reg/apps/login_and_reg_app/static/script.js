@@ -15,7 +15,7 @@ $(document).ready(function(){
         id = '#' + id
         var value = $(id).val();
         var errorMessage = "";
-        console.log("Validating: " + value)
+        console.log(`"Validating ID ${id}: " + ${value}`)
 
         switch(id){
             case '#first_name':
@@ -24,6 +24,7 @@ $(document).ready(function(){
                     errorMessage = "Must be between 2 and 32 characters"
                 }
                 break;
+            case '#login_email':
             case '#email':
                 re = /[A-Za-z0-9.-_+]+@[A-Za-z0-9.-_+]+\.[A-Za-z0-9]+/gm;
                 if (re.test(value) == false){
@@ -47,6 +48,11 @@ $(document).ready(function(){
             case '#confirm':
                 if (value != $('#password').val()){
                     errorMessage = "No match"
+                }
+                break;
+            case '#login_password':
+                if (value.length < 1){
+                    errorMessage = "Please enter a password"
                 }
                 break;
         }
@@ -79,27 +85,59 @@ $(document).ready(function(){
 
 
     $('form').submit(function(){
+        console.log("Form submit clicked")
         var errors = 0
+        var form_id = "#" + $(this).attr('id')
+        current_form = this
+        
+        if (window.location.pathname == "/wall"){
 
-        if (this.id == "registration"){
-            $('input').each(function(){
+            if (form_id == "#post_message"){
+                $.post('/wall/message', $(this).serialize(), function(){
+                    $.get('/wall/message/recent', function(data){
+                        console.log(data['recent_message'])
+                        $('#messages_list').prepend(data['recent_message'])
+                        target = $('.message').first()
+                        $(target).hide()
+                        $('.post_comment').first().clone().appendTo(target)
+                        $(target).slideDown()
+                    });
+                });
+            }
+            else{
+                console.log("Submitting comment")
+                $.post('/wall/comment', $(this).serialize(), function(){
+                    $.get('/wall/comment/recent', function(data){
+                        current_comments_list = $(current_form).siblings('.comments_list')
+                        $(current_comments_list).append(data['recent_comment'])
+                        target = $(current_comments_list).children('.comment').last()
+                        $(target).hide().slideDown()
+                    });
+                });
+            }
+        }
+        else{
+            if (form_id == "#registration")
+                submitUrl = "/user"
+            else if (form_id == "#login")
+                submitUrl = "/login"
+            
+            $(form_id).find('input').each(function(){
                 console.log(".each ID: " + $(this).attr('id'))
                 errors += validate($(this).attr('id'));
             });
             
             console.log(`There are ${errors} errors`)
             if (errors == 0){
-                $.post( "/user", $('#registration').serialize(), function(){
+                $.post( submitUrl, $(form_id).serialize(), function(){
                     window.location.replace("/success")
                 });
             }
         }
-        else if(this.id == "login"){
-            $.post( "/login", $('#login').serialize(), function(){
-                window.location.replace("/success")
-            });
-        }
 
+
+
+        
         return false;
     });
 });

@@ -17,5 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('login_and_reg_app.urls'))
+    path('', include('apps.login_and_reg_app.urls')),
+    path('', include('apps.wall_app.urls'))
 ]

@@ -9,10 +9,12 @@
 </head>
 <body>
     <div id="wrapper">
-        <h3>Success! Welcome, {{current_user.first_name}}</h3>
-        <p class="green">Successfully {{request.session.status}}</p>
-
-        <a id="logout" href="/logout">Log Out</a>
+        <div id="header">
+            <h3>Success! Welcome, {{current_user.first_name}}</h3>
+            <a href="/logout">log off</a>
+        </div>
+        <p class="green-text">Successfully {{request.session.status}}</p>
+        <a href="/wall">Go to the Wall</a>
     </div>
 </body>
 </html>
