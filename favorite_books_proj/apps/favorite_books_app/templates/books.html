@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Favorite Books</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h2>Welcome, {{current_user.first_name}}</h2>
+            <a href="/logout">Log Out</a>
+        </div>
+
+        <form id="add-book" class="info-box" action="/books/create" method="POST">
+            {% csrf_token %}
+            <h4>Add a Favorite Book</h4>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td><label for="title">Title:</label></td>
+                        <td><input required type="text" name="title" id="title"></td>
+                    </tr>
+                    <tr>
+                        <td class="error_row" colspan="2"></td>
+                    </tr>  
+                    <tr>
+                        <td><label for="desc">Description:</label></td>
+                        <td><textarea required name="desc" id="desc" cols="17" rows="5"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="error_row" colspan="2"></td>
+                    </tr>  
+                </tbody>
+            </table>
+
+            <input class="submit-button" type="submit" value="Add">
+            
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </form>
+
+        <div id="all-books" class="info-box">
+            <h4>All Books</h4>
+            {% for book in books %}
+                <div class="listed-book">
+                    <a href="/books/{{book.id}}">{{book.title}}</a>
+                    <p>(added by {{book.uploaded_by_id.get_full_name}})</p>
+                    <!-- This is one of your favorites? -->
+                    <!-- Add to favorites link -->
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>
