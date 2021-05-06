@@ -2,9 +2,15 @@ console.log("Script linked")
 
 $(document).ready(function(){
     console.log("Document ready")
+    console.log("Current URL: " + window.location.pathname)
     $('.error_row').attr('active', 'false')
 
     $('input').focusout(function(e){
+        id = this.id
+        console.log("Validating " + id)
+        validate(id)
+    });
+    $('textarea').focusout(function(e){
         id = this.id
         console.log("Validating " + id)
         validate(id)
@@ -55,6 +61,16 @@ $(document).ready(function(){
                     errorMessage = "Please enter a password"
                 }
                 break;
+            case '#title':
+                if (value.length < 1){
+                    errorMessage = "Please enter a title"
+                }
+                break;
+            case '#desc':
+                if (value.length < 5){
+                    errorMessage = "Description must be at least 5 characters"
+                }
+                break;
         }
         
         if (errorMessage != ""){
@@ -83,15 +99,12 @@ $(document).ready(function(){
         }
     }
 
-
     $('form').submit(function(){
         console.log("Form submit clicked")
         var errors = 0
         var form_id = "#" + $(this).attr('id')
         current_form = this
         
-        if (window.location.pathname == "/wall"){
-
             // if (form_id == "#post_message"){
             //     $.post('/wall/message', $(this).serialize(), function(){
             //         $.get('/wall/message/recent', function(data){
@@ -115,29 +128,35 @@ $(document).ready(function(){
             //         });
             //     });
             // }
-        }
+        
 
-        else{
-            if (form_id == "#registration")
-                submitUrl = "/user"
-            else if (form_id == "#login")
-                submitUrl = "/login"
-            
-            $(form_id).find('input').each(function(){
-                console.log(".each ID: " + $(this).attr('id'))
-                errors += validate($(this).attr('id'));
-            });
-            
-            console.log(`There are ${errors} errors`)
-            if (errors == 0){
-                $.post( submitUrl, $(form_id).serialize(), function(){
+
+        if (form_id == "#registration")
+            submitUrl = "/user"
+        else if (form_id == "#login")
+            submitUrl = "/login"
+        else if (form_id=="add-book")
+            submitUrl = "/books/create"
+        else if (form_id == "#book-info")
+            submitUrl = window.location.pathname + "/update"
+        
+        $(form_id).find('input').each(function(){
+            console.log(".each ID: " + $(this).attr('id'))
+            errors += validate($(this).attr('id'));
+        });
+        $(form_id).find('textarea').each(function(){
+            console.log("Finding textarea")
+            console.log(".each ID: " + $(this).attr('id'))
+            errors += validate($(this).attr('id'));
+        });
+        
+        console.log(`There are ${errors} errors`)
+        if (errors == 0){
+            $.post( submitUrl, $(form_id).serialize(), function(){
+                if (window.location.pathname == '/')
                     window.location.replace("/success")
-                });
-            }
+            });
         }
-
-
-
         
         return false;
     });
@@ -150,8 +169,60 @@ $(document).ready(function(){
         }, 5000);
     }
 
+    let re = /\/books\/\d+/
 
+    if( re.test(window.location.pathname) ){
+        console.log("Now in show_book template")
 
+        //Get logged in user info
+        //Get current book info
+        $.get(window.location.pathname + '/info', function(data){
+            $('#book-info').attr('action', `${data['book_id']}/update`)
+            var title_field = "";
+            var description_field = `<label for="description">Description: </label>`;
+            var submit_field = "";
+
+            if(data['uploaded_by_user']){
+                title_field += `<input required class="edit-title" type="text" name="title" value="${data['book_title']}">`;
+                description_field += `<textarea name="desc" id="desc" cols="32" rows="10">${data['book_desc']}</textarea>`
+                submit_field += `<input class="submit-button" type="submit" value="Update">
+                <button class="submit-button delete">Delete</button>`
+            }
+            else{
+                title_field += `<h3>${data['book_title']}</h3>`
+                description_field += `<i>${data['book_desc']}</i>`
+                submit_field = NaN 
+            }
+            
+            $('.title-field').append(title_field);
+            $('.description-field').append(description_field)
+            $('.submit-field').append(submit_field)
+
+            $('.delete').click(function(){
+                console.log("Clicked on delete")
+                $('#wrapper').after(
+                    `<div class="modal">
+                    <h4>Are you sure?</h4>
+                    <a href="${window.location.pathname + "/destroy"}" class="submit-button delete">Yes</a>
+                    <button id="no" class="submit-button">No</button>
+                    </div>`
+                )
+
+                // $('#wrapper').click(function(){
+                //     console.log("Wrapper clicked")
+                //     $('.modal').css("display", "none")
+                // });
+                $('#no').click(function(){
+                    $('.modal').remove();
+                });
+                
+            });
+            
+            // if(data['is_favorite'] == True){
+
+            // }
+        });
+    }
 
 });
 

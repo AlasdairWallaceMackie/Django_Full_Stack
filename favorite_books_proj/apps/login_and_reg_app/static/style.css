@@ -1,15 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+}
 #wrapper{
     background-color: lightblue;
     font-family: sans-serif;
     padding: 20px;
-    width: 800px;
+    width: 650px;
 }
 #header{
     border-bottom: 3px solid black;
-    width: 100%;
+    width: 93%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    margin-right: 20px;
+    padding: 20px;
 }
 #registration, #login{
     display: inline-block;
@@ -42,6 +48,9 @@
 .comment-field input[type="text"]{
     width: 75%;
 }
+.listed-book{
+    padding: 7px;
+}
 
 .green-text{
     color: green;
@@ -58,9 +67,10 @@
     box-shadow: 5px 5px 0px black;
     font-size: 16px;
     padding: 10px;
-    border: none;
+    border: 1px solid black;
     border-radius: 0px;
     margin-top: 10px;
+    text-decoration: none;
 }
 
 .blue{
@@ -71,15 +81,33 @@
     background-color: green;
     color: white;
 }
+.delete{
+    background-color: red;
+    color: white;
+}
 .info-box{
     display: inline-block;
     vertical-align: top;
+    padding: 10px;
 }
     .info-box h4{
         width: 100%;
         text-align: center;
     }
-
+    .db-info{
+        font-style: italic;
+        font-size: 12px;
+        margin: 10px 0px;
+    }
+.modal{
+    background-color: beige;
+    padding: 20px;
+    display: block;
+    position: fixed;
+    left: 25%;
+    top: 25%;
+    box-shadow: 1px 1px 3px black;
+}
 
 form{
     width: 285px;
@@ -101,4 +129,17 @@ textarea{
 }
 td{
     vertical-align: top;
+}
+
+h1, h2, h3, h4{
+    margin: 5px 0px;
+}
+
+li{
+    margin-left: 20px;
+}
+
+
+.title-field, .edit-title{
+    font-size: 22px;
 }

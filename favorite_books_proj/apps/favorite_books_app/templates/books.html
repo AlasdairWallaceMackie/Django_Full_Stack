@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -53,7 +55,8 @@
             {% for book in books %}
                 <div class="listed-book">
                     <a href="/books/{{book.id}}">{{book.title}}</a>
-                    <p>(added by {{book.uploaded_by_id.get_full_name}})</p>
+                    <br>
+                    <sub>(added by {{book.uploaded_by_id.get_full_name}})</sub>
                     <!-- This is one of your favorites? -->
                     <!-- Add to favorites link -->
                 </div>

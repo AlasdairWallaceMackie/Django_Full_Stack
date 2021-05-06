@@ -6,21 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
             <h2>Welcome, {{current_user.first_name}}</h2>
+            <a href="/books">Return to Books</a>
             <a href="/logout">Log Out</a>
         </div>
 
-        <form id="book-info" class="info-box">
+        <form id="book-info" class="info-box" action="" method="POST">
             {% csrf_token %}
-            {{title_field}}
-            <p>Added by: {{book.uploaded_by_id.first_name}} {{book.uploaded_by_id.last_name}}</p>
-            <p>Added on: {{book.created_at}}</p>
-            <p>Last updated on: {{book.updated_at}}</p>
-            {{description_field}}
+            <div class="title-field"></div>
+            <div class="error_row"></div>
+            <div class="db-info">
+                <p>Added by: {{book.uploaded_by_id.get_full_name}}</p>
+                <p>Added on: {{book.created_at}}</p>
+                <p>Last updated on: {{book.updated_at}}</p>
+            </div>
+            <div class="description-field"></div>
+            <div class="error_row"></div>
+            <div class="submit-field"></div>
         </form>
 
         <div id="users-who-like" class="info-box">
@@ -28,7 +36,7 @@
             <ul>
                 {% for user in book.favorites.all %}
                     <li>
-                        {{user.first_name}} {{user.last_name}}
+                        {{user.get_full_name}}
                     </li>
                 {% endfor %}
             </ul>
@@ -36,6 +44,13 @@
             <!-- Add to favorites? -->
 
         </div>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 
 </body>

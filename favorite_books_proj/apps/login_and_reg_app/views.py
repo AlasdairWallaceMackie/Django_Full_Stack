@@ -9,9 +9,12 @@ def index(request):
     context = {
         # 'all_users': User.objects.all()
     }
+
     if request.session.has_key('current_user_id'):
-        request.session['status'] = "logged in"
-        context['current_user'] = User.objects.get(id = request.session['current_user_id'])
+        context['login_status'] = f"Logged in as: {User.objects.get(id = request.session['current_user_id']).get_full_name()}"
+    else:
+        context['login_status'] = f"Not logged in"
+        
     return render(request, 'index.html', context)
 
 def create_user(request):

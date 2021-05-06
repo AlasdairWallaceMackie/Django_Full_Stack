@@ -12,9 +12,9 @@
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1>CodingDojo Wall</h1>
-            <p>Logged in as: {{current_user.get_full_name}}</p>
-            <a href="/logoff">Log Out</a>
+            <h1>Favorite Books</h1>
+            <p>{{login_status}}</p>
+            <a href="/logout">Log Out</a>
         </div>
 
         <div id="main_content">
@@ -48,10 +48,10 @@
                         <!-- <tr>
                             <td><label for="birthday">Birthday:</label></td>
                             <td><input type="date" name="birthday" id="birthday"></td>
-                        </tr> -->
+                        </tr>
                         <tr>
                             <td class="error_row" colspan="2"></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td><label for="password">Password:</label></td>
                             <td><input type="password" name="password" id="password"></td>
