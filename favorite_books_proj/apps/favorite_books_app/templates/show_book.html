@@ -19,16 +19,25 @@
 
         <form id="book-info" class="info-box" action="" method="POST">
             {% csrf_token %}
-            <div class="title-field"></div>
-            <div class="error_row"></div>
+            {% if uploaded_by_user %}
+                <input required id="title" class="edit-title" type="text" name="title" value="{{book.title}}">
+                <div class="error_row"></div>
+            {% else %}
+                <h3>{{book.title}}</h3>
+            {% endif %}
             <div class="db-info">
                 <p>Added by: {{book.uploaded_by_id.get_full_name}}</p>
                 <p>Added on: {{book.created_at}}</p>
                 <p>Last updated on: {{book.updated_at}}</p>
             </div>
-            <div class="description-field"></div>
-            <div class="error_row"></div>
-            <div class="submit-field"></div>
+            {% if uploaded_by_user %}
+                <textarea name="desc" id="desc" cols="32" rows="10">{{book.desc}}</textarea>
+                <div class="error_row"></div>
+                <input class="submit-button" type="submit" value="Update">
+                <button class="submit-button delete">Delete</button>
+            {% else %}
+                <i>{{book.desc}}</i>
+            {% endif %}
         </form>
 
         <div id="users-who-like" class="info-box">
@@ -41,7 +50,11 @@
                 {% endfor %}
             </ul>
 
-            <!-- Add to favorites? -->
+            {% if is_favorite %}
+                <a href="/books/{{book.id}}/favorites/remove"><img class="favorite-status" src="{% static 'img/favorite.png' %}" alt="Favorited"></a>               
+            {% else %}
+                <a href="/books/{{book.id}}/favorites/add"><img class="favorite-status" src="{% static 'img/unfavorite.png' %}" alt="Not Favorited"></a>            
+            {% endif %}
 
         </div>
         {% if messages %}

@@ -13,6 +13,7 @@
     <div id="wrapper">
         <div id="header">
             <h2>Welcome, {{current_user.first_name}}</h2>
+            <a href="/books/favorites">My Favorites</a>
             <a href="/logout">Log Out</a>
         </div>
 
@@ -55,10 +56,13 @@
             {% for book in books %}
                 <div class="listed-book">
                     <a href="/books/{{book.id}}">{{book.title}}</a>
+                    {% if current_user in book.favorites.all %}
+                        <a href="/books/{{book.id}}/favorites/remove"><img class="favorite-status" src="{% static 'img/favorite.png' %}" alt="Favorited"></a>
+                    {% else %}
+                        <a href="/books/{{book.id}}/favorites/add"><img class="favorite-status" src="{% static 'img/unfavorite.png' %}" alt="Not Favorited"></a> 
+                    {% endif %}
                     <br>
                     <sub>(added by {{book.uploaded_by_id.get_full_name}})</sub>
-                    <!-- This is one of your favorites? -->
-                    <!-- Add to favorites link -->
                 </div>
             {% endfor %}
         </div>

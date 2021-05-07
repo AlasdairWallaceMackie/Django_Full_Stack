@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Favorite Books</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h2>Welcome, {{current_user.first_name}}</h2>
+            <a href="/books">Return to Books</a>
+            <a href="/logout">Log Out</a>
+        </div>
+        <h1>Your Favorites:</h1>
+        {% if favorites %}
+            <ul>
+                {% for favorite in favorites %}
+                    <li>
+                        <a href="/books/{{favorite.id}}">{{favorite.title}}</a>
+                        <a href="/books/{{favorite.id}}/favorites/remove"><img class="favorite-status" src="{% static 'img/favorite.png' %}" alt="Favorited"></a> 
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h4>No favorites added</h4>
+        {% endif %}
+    </div>
+
+</body>
+</html>

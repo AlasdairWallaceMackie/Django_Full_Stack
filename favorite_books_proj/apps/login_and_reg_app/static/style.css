@@ -71,6 +71,7 @@
     border-radius: 0px;
     margin-top: 10px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .blue{
@@ -107,6 +108,9 @@
     left: 25%;
     top: 25%;
     box-shadow: 1px 1px 3px black;
+}
+.favorite-status{
+    width: 25px;
 }
 
 form{

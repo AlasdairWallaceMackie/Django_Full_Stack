@@ -37,23 +37,10 @@ def show_book(request, id):
     context = {
         'book': book,
         'current_user': User.objects.get(id = request.session['current_user_id']),
+        'uploaded_by_user': uploaded_by_current_user(request, book),
+        'is_favorite': book.is_favorite(request)
     }
     return render(request, 'show_book.html', context)
-
-def get_book_info(request, id):
-    print("get_book_info() called")
-    book = Book.objects.get(id = id)
-    response = {}
-    if uploaded_by_current_user(request, book):
-        response['uploaded_by_user'] = True
-    else:
-        response['uploaded_by_user'] = False
-    
-    response['book_id'] = book.id
-    response['book_title'] = book.title
-    response['book_desc'] = book.desc
-    # response['is_favorite'] = is_favorite(request, book)
-    return JsonResponse(response)
 
 def update_book(request, id):
     if request.method == 'POST':
@@ -69,8 +56,9 @@ def update_book(request, id):
         book_to_edit.save()
 
         messages.info(request, "Updated successfully")
+        print("Updated successfully")
             
-    return redirect(f"/books/{id}")
+    return redirect(f"/books")
 
 def delete_book(request, id):
     try:
@@ -93,12 +81,32 @@ def uploaded_by_current_user(request, book):
     else:
         return False
 
-## TODO TEST THIS!!!!!!
 def is_favorite(request, book):
     user = User.objects.get(id = request.session['current_user_id'])
-    if book.favorites.filter(user):
+    if book.favorites.filter(id = request.session['current_user_id']):
         print("This book is in the current user's favorites")
         return True
     else:
         print("This book is not in the user's favorites")
         return False
+
+def add_favorite(request, id):
+    user = User.objects.get(id = request.session['current_user_id'])
+    book_to_edit = Book.objects.get(id=id)
+    book_to_edit.favorites.add(user)
+    return redirect(f"/books/{id}")
+
+def remove_favorite(request, id):
+    user = User.objects.get(id = request.session['current_user_id'])
+    book_to_edit = Book.objects.get(id=id)
+    book_to_edit.favorites.remove(user)
+    return redirect(f"/books/{id}")
+
+
+def show_favorites(request):
+    user = User.objects.get(id = request.session['current_user_id'])
+    context = {
+        'current_user': user,
+        'favorites': user.favorites.all()
+    }
+    return render(request, 'favorites.html', context)

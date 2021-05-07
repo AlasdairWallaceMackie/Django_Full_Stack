@@ -1,6 +1,7 @@
 from django.db import models
 from ..login_and_reg_app.models import User
 
+
 class Book_Manager(models.Manager):
     def basic_validator(self, post_data):
         errors = {}
@@ -23,3 +24,8 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def is_favorite(self, request):
+        if self.favorites.filter(id = request.session['current_user_id']):
+            return True
+        else:
+            return False

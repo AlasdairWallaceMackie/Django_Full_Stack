@@ -104,32 +104,6 @@ $(document).ready(function(){
         var errors = 0
         var form_id = "#" + $(this).attr('id')
         current_form = this
-        
-            // if (form_id == "#post_message"){
-            //     $.post('/wall/message', $(this).serialize(), function(){
-            //         $.get('/wall/message/recent', function(data){
-            //             console.log(data['recent_message'])
-            //             $('#messages_list').prepend(data['recent_message'])
-            //             target = $('.message').first()
-            //             $(target).hide()
-            //             $('.post_comment').first().clone().appendTo(target)
-            //             $(target).slideDown()
-            //         });
-            //     });
-            // }
-            // else{
-            //     console.log("Submitting comment")
-            //     $.post('/wall/comment', $(this).serialize(), function(){
-            //         $.get('/wall/comment/recent', function(data){
-            //             current_comments_list = $(current_form).siblings('.comments_list')
-            //             $(current_comments_list).append(data['recent_comment'])
-            //             target = $(current_comments_list).children('.comment').last()
-            //             $(target).hide().slideDown()
-            //         });
-            //     });
-            // }
-        
-
 
         if (form_id == "#registration")
             submitUrl = "/user"
@@ -155,6 +129,9 @@ $(document).ready(function(){
             $.post( submitUrl, $(form_id).serialize(), function(){
                 if (window.location.pathname == '/')
                     window.location.replace("/success")
+                else if( /\/books\/\d+/.test(window.location.pathname) ){
+                    window.location.replace("/books");
+                }
             });
         }
         
@@ -168,61 +145,32 @@ $(document).ready(function(){
             window.location.href = "/books";
         }, 5000);
     }
+    
+    $('.delete').click(function(){
+        console.log("Clicked on delete")
+        $('#wrapper').append(
+            `<div class="modal">
+            <h4>Are you sure?</h4>
+            <a href="${window.location.pathname + "/destroy"}" class="submit-button delete">Yes</a>
+            <button id="no" class="submit-button">No</button>
+            </div>`
+        )
 
-    let re = /\/books\/\d+/
-
-    if( re.test(window.location.pathname) ){
-        console.log("Now in show_book template")
-
-        //Get logged in user info
-        //Get current book info
-        $.get(window.location.pathname + '/info', function(data){
-            $('#book-info').attr('action', `${data['book_id']}/update`)
-            var title_field = "";
-            var description_field = `<label for="description">Description: </label>`;
-            var submit_field = "";
-
-            if(data['uploaded_by_user']){
-                title_field += `<input required class="edit-title" type="text" name="title" value="${data['book_title']}">`;
-                description_field += `<textarea name="desc" id="desc" cols="32" rows="10">${data['book_desc']}</textarea>`
-                submit_field += `<input class="submit-button" type="submit" value="Update">
-                <button class="submit-button delete">Delete</button>`
-            }
-            else{
-                title_field += `<h3>${data['book_title']}</h3>`
-                description_field += `<i>${data['book_desc']}</i>`
-                submit_field = NaN 
-            }
+        // $('#wrapper').off()
+        $('#wrapper').click(function(){
+            console.log("Wrapper clicked")
             
-            $('.title-field').append(title_field);
-            $('.description-field').append(description_field)
-            $('.submit-field').append(submit_field)
-
-            $('.delete').click(function(){
-                console.log("Clicked on delete")
-                $('#wrapper').after(
-                    `<div class="modal">
-                    <h4>Are you sure?</h4>
-                    <a href="${window.location.pathname + "/destroy"}" class="submit-button delete">Yes</a>
-                    <button id="no" class="submit-button">No</button>
-                    </div>`
-                )
-
-                // $('#wrapper').click(function(){
-                //     console.log("Wrapper clicked")
-                //     $('.modal').css("display", "none")
-                // });
-                $('#no').click(function(){
-                    $('.modal').remove();
-                });
-                
+            $('#no').click(function(){
+                $('.modal').remove();
             });
-            
-            // if(data['is_favorite'] == True){
-
-            // }
+            $('#wrapper').click(function(){
+                $('.modal').remove();
+            });
         });
-    }
+        
+        return false;
+    });
+
 
 });
 
