@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Books Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div>
+                <a href="/books">Home</a>
+                <a href="logout">Logout</a>
+            </div>
+        </div>
+        <div id="main-content">
+            <form action="/books/" method="POST">
+                {% csrf_token %}
+                <h3>Add a New Book Title and a Review</h3>
+
+                <label for="form-title">Book Title:</label>
+                <input type="text" name="title" id="form-title">
+                <br>
+                <label for="form-author">Author:</label>
+                <ul class="undecorated">
+                    <li>
+                        <p>Choose from the list:</p>
+                        <select name="author_from_list" id="form_author_list">
+                            <option value="">Choose an Author</option>
+                            {% for author in authors %}
+                                <option value="{{author.id}}">{{author.get_full_name}}</option>
+                            {% empty %}
+                                <option disabled value="">No authors added yet</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                    <li>
+                        <p>Or add a new author</p>
+                        <input type="text" name="new_author">
+                    </li>
+                </ul>
+                <label for="form-review">Review:</label>
+                <textarea name="review" id="form-review" cols="30" rows="10"></textarea>
+                <label for="form-rating">Rating:</label>
+                <input id="form-star-rating" name="rating" type="hidden" value="3">
+                <div class="star-rating">
+                    <img class="star" value="1" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="2" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="3" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="4" src="{% static 'img/empty_star.png' %}">
+                    <img class="star" value="5" src="{% static 'img/empty_star.png' %}">
+                </div>
+                <input type="submit" value="Add Book and Review">
+            </form>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+
+</html>

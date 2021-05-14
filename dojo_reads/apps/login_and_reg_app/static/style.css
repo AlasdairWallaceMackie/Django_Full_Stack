@@ -1,0 +1,98 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#wrapper{
+    background-color: lightblue;
+    font-family: sans-serif;
+    padding: 20px;
+    width: 650px;
+}
+#header{
+    border-bottom: 3px solid black;
+    width: 93%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    padding: 20px;
+}
+#registration, #login{
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+.green-text{
+    color: green;
+}
+
+.error_row{
+    height: 22px;
+}
+.error{
+    color: red;
+    font-size: 12px;
+}
+.submit-button{
+    box-shadow: 5px 5px 0px black;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 0px;
+    margin-top: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.star{
+    width: 20px;
+    float: left;
+    padding-right: 3px;
+}
+.star-rating{
+    display: inline-block;
+}
+.blue{
+    background-color: blue;
+    color: white;
+}
+.green{
+    background-color: green;
+    color: white;
+}
+.delete{
+    background-color: red;
+    color: white;
+}
+
+
+form{
+    width: 285px;
+
+}
+    form h1, form h2{
+        width: 100%;
+        text-align: center;
+    }
+    input, textarea{
+        border-radius: 5px;
+    }
+
+    input[type="submit"]{
+        margin-left: 45%;
+    }
+textarea{
+    resize: none;
+}
+td{
+    vertical-align: top;
+}
+
+h1, h2, h3, h4{
+    margin: 5px 0px;
+}
+
+li{
+    margin-left: 20px;
+}

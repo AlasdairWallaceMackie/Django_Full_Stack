@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Books Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h4>Welcome, {{current_user.alias}}!</h4>
+            <div>
+                <a href="/books/new">Add Book and Review</a>
+                <a href="logout">Logout</a>
+            </div>
+        </div>
+        <div id="main-content">
+            <div id="recent-reviews">
+                    <h3>Recent Book Reviews:</h3>
+                    {% for review in reviews %}
+                        <div class="home-page-review">
+                            <a href="/books/{{review.id}}">{{review.book.title}}</a>
+                            <ul class="undecorated">
+                                <li>
+                                    <p>Rating:</p>
+                                    <div class="star-rating">
+                                        {% for i in review.filled_stars %}
+                                            <img class="star" src="{% static 'img/filled_star.png' %}">
+                                        {% endfor %}
+                                        {% for i in review.empty_stars %}
+                                            <img class="star" src="{% static 'img/empty_star.png' %}">
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                <li>
+                                    <textarea cols="30" rows="10">
+                                        <a href="/users/{{reviewer.id}}">{{reviewer.first_name}}</a>says: <i>{{review.text}}</i>
+                                    </textarea>
+                                </li>
+                                <li>
+                                    <i>Posted on {{review.created_at}}</i>
+                                </li>
+                            </ul>
+                        </div>
+                        {% empty %}
+                            <strong>No reviews yet!</strong>
+                    {% endfor %}
+            </div>
+            <div id="other-books">
+                <h3>Other Books with Reviews:</h3>
+                <textarea class="book-list" cols="30" rows="10">
+                    {% for book in books%}
+                        <a href="/books/{{book.id}}">{{book.title}}</a>
+                    {% endfor %}
+                </textarea>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

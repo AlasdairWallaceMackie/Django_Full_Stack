@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Books Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div>
+                <a href="/books">Home</a>
+                <a href="logout">Logout</a>
+            </div>
+        </div>
+        <div id="main-content">
+
+            <div id="book-detail-reviews">
+                <h3>{{book.title}}</h3>
+                <p>Author: {{book.author.get_full_name}}</p>
+                <br>
+                <h2>Reviews:</h2>
+                {% for review in book.reviews.all %}
+                    <ul class="undecorated top-border">
+                        <li>
+                            <p>Rating: </p>
+                            <div class="star-rating">
+                                {% for i in review.filled_stars %}
+                                        <img class="star" src="{% static 'img/filled_star.png' %}">
+                                    {% endfor %}
+                                    {% for i in review.empty_stars %}
+                                        <img class="star" src="{% static 'img/empty_star.png' %}">
+                                {% endfor %}
+                            </div>
+                        </li>
+                        <li>
+                            <a href="/users/{{review.reviewer.id}}">{{review.reviewer.first_name}}</a> says: <i>{{review.text}}</i>
+                        </li>
+                        <li>
+                            <i>Posted on {{review.created_at}}</i>
+                            {% if review.reviewer.id == request.session.current_user_id %}
+                                <form action="/review" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="delete" value={{review.id}}>
+                                    <input type="submit" value="Delete this Review">
+                                </form>
+                            {% endif %}
+                        </li>
+                    </ul>
+                {% endfor %}
+            </div>
+
+            <form id="add-review" action="/reviews" method="POST">
+                {% csrf_token %}
+                <label for="form-add-review">Add a Review:</label>
+                <textarea name="review" id="form-add-revuew" cols="30" rows="10"></textarea>
+                <label for="form-rating">Rating:</label>
+                <input id="form-star-rating" name="rating" type="hidden" value="3">
+                <div class="star-rating">
+                    <img class="star" value="1" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="2" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="3" src="{% static 'img/filled_star.png' %}" alt="star">
+                    <img class="star" value="4" src="{% static 'img/empty_star.png' %}">
+                    <img class="star" value="5" src="{% static 'img/empty_star.png' %}">
+                </div>
+                <input type="submit" value="Submit Review">
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

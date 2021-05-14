@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Books Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div>
+                <a href="/books">Home</a>
+                <a href="/books/new">Add Book and Review</a>
+                <a href="logout">Logout</a>
+            </div>
+        </div>
+        <div id="main-content">
+            <h2>User Alias: {{user.alias}}</h2>
+            <h4>Name: {{user.get_full_name}}</h4>
+            <p>Email: {{user.email}}</p>
+            <p>Total Reviews: {{user.reviews.count}}</p>
+            <br>
+            <h4>Posted reviews on the following books:</h4>
+            <ul class="undecorated">
+                {% for review in user.reviews %}
+                    <li><a href="books/{{review.book.id}}">{{review.book.title}}</a></li>
+                {% empty %}
+                    <strong>No reviews yet!</strong>
+                {% endfor%}
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
