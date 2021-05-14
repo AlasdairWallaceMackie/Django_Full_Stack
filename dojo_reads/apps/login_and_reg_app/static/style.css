@@ -17,11 +17,21 @@
     margin-right: 20px;
     padding: 20px;
 }
+    #header a{
+        margin-left: 10px;
+    }
 #registration, #login{
     display: inline-block;
     vertical-align: top;
 }
-
+#main-content{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+#other-books{
+    width: 40%;
+}
 
 .green-text{
     color: green;
@@ -45,6 +55,20 @@
     cursor: pointer;
 }
 
+.home-page-review{
+    margin-bottom: 30px;
+}
+.scroll-box{
+    padding: 10px;
+    overflow: scroll;
+    height: 150px;
+    border: 3px solid black;
+    font-size: smaller;
+}
+    .scroll-box li{
+        margin-left: 0px;
+        margin-bottom: 5px;
+    }
 .star{
     width: 20px;
     float: left;
@@ -93,6 +117,21 @@ h1, h2, h3, h4{
     margin: 5px 0px;
 }
 
+.undecorated{
+    list-style-type: none;
+}
 li{
-    margin-left: 20px;
+    margin: 10px 0px 10px 20px;
+
+}
+p{
+    display: inline-block;
+}
+.info{
+    font-size: smaller;
+}
+input[type="submit"]{
+    margin-top: 15px;
+    padding: 5px;
+    cursor: pointer;
 }

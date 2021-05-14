@@ -15,7 +15,7 @@
             <h4>Welcome, {{current_user.alias}}!</h4>
             <div>
                 <a href="/books/new">Add Book and Review</a>
-                <a href="logout">Logout</a>
+                <a href="/logout">Logout</a>
             </div>
         </div>
         <div id="main-content">
@@ -23,7 +23,7 @@
                     <h3>Recent Book Reviews:</h3>
                     {% for review in reviews %}
                         <div class="home-page-review">
-                            <a href="/books/{{review.id}}">{{review.book.title}}</a>
+                            <a href="/books/{{review.book.id}}">{{review.book.title}}</a>
                             <ul class="undecorated">
                                 <li>
                                     <p>Rating:</p>
@@ -37,12 +37,12 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <textarea cols="30" rows="10">
-                                        <a href="/users/{{reviewer.id}}">{{reviewer.first_name}}</a>says: <i>{{review.text}}</i>
-                                    </textarea>
+                                    <div>
+                                        <a href="/users/{{review.reviewer.id}}">{{review.reviewer.first_name}}</a> says: <i>{{review.text}}</i>
+                                    </div>
                                 </li>
                                 <li>
-                                    <i>Posted on {{review.created_at}}</i>
+                                    <i class="info">Posted on {{review.created_at}}</i>
                                 </li>
                             </ul>
                         </div>
@@ -52,11 +52,13 @@
             </div>
             <div id="other-books">
                 <h3>Other Books with Reviews:</h3>
-                <textarea class="book-list" cols="30" rows="10">
+                <ul class="book-list scroll-box undecorated">
                     {% for book in books%}
-                        <a href="/books/{{book.id}}">{{book.title}}</a>
+                        <li>
+                            <a href="/books/{{book.id}}">{{book.title}}</a>
+                        </li>
                     {% endfor %}
-                </textarea>
+                </div>
             </div>
         </div>
 

@@ -16,6 +16,8 @@ class Author_Manager(models.Manager):
         if not re.match(post_data['first_name']) or not re.match(post_data['last_name']):
             errors['name_illegal_characters'] = "Please use valid characters in the name"
 
+        return errors
+
 class Book_Manager(models.Manager):
     def basic_validator(self, post_data):
         errors = {}
@@ -27,16 +29,20 @@ class Book_Manager(models.Manager):
         if post_data['author_from_list'] == "" and post_data['new_author'] == "":
             errors['no_author'] = "Please add choose an author"
         
+        return errors
 
 class Review_Manager(models.Manager):
     def basic_validator(self, post_data):
         errors = {}
+        rating = int(post_data['rating'])
 
         if len(post_data['text']) < 1:
             errors['text_length'] = "Please write a review"
 
-        if post_data['rating'] < 1 or post_data['rating'] > MAXIMUM_RATING:
+        if rating < 1 or rating > int(MAXIMUM_RATING):
             errors['rating_out_of_bounds'] = "Rating must be between 1 and 5"
+        
+        return errors
 
 
 class Author(models.Model):
@@ -59,6 +65,9 @@ class Book(models.Model):
     objects = Book_Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __repr__(self):
+        return f"Book object: {self.title} <{self.id}>"
 
 class Review(models.Model):
     text = models.TextField(null=True)

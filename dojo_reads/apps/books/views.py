@@ -7,8 +7,8 @@ def books(request):
     if request.method == "GET":
         context = {
             'current_user': User.objects.get(id = request.session['current_user_id']),
-            'reviews': Review.objects.order_by("-created_at"),
-            'books': Book.objects.all(),
+            'reviews': Review.objects.order_by("-created_at")[:3],
+            'books': Book.objects.order_by('title'),
         }
         return render(request, 'book_reviews.html', context)
     elif request.method == "POST":
@@ -17,7 +17,7 @@ def books(request):
         if errors:
             for k, v in errors.items():
                 messages.error(request, v)
-            return redirect('new')
+            return redirect('/books/new')
 
         # Check if new_author is filled out, otherwise take from list
         if request.POST['new_author'] == "":
@@ -46,7 +46,10 @@ def books(request):
         return redirect(f'/books/{new_book.id}')
 
 def new_book_form(request):
-    return render(request, 'add_book.html')
+    context = {
+        'authors': Author.objects.all(),
+    }
+    return render(request, 'add_book.html', context)
 
 def book_detail(request, id):
     try:
@@ -54,8 +57,32 @@ def book_detail(request, id):
     except:
         return HttpResponse("<h1>Book not found</h1>")
     context = {
-        'book': book
+        'book': book,
     }
     return render(request, 'book_detail.html', context)
 
+def review(request, id):
+    if request.method == "POST":
+        errors = Review.objects.basic_validator(request.POST)
+        if errors:
+            for k,v in errors.items():
+                messages.error(request, v)
+        else:
+            Review.objects.create(
+                text = request.POST['text'],
+                book = Book.objects.get(id = id),
+                reviewer = User.objects.get(id = request.session['current_user_id']),
+                rating = request.POST['rating']
+            )
+        return redirect(f'/books/{id}')
+
+
 #When deleting reviews, make sure the logged in user actually owns the review
+def modify_review(request, id, review_id):
+    if request.method == "POST":
+        if request.POST['delete']:
+            review_to_delete = Review.objects.get(id = review_id)
+            if review_to_delete.reviewer.id == request.session['current_user_id']:
+                review_to_delete.delete()
+    
+    return redirect(f'/books/{id}')

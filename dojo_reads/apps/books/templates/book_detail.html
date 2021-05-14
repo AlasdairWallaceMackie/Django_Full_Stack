@@ -14,7 +14,7 @@
         <div id="header">
             <div>
                 <a href="/books">Home</a>
-                <a href="logout">Logout</a>
+                <a href="/logout">Logout</a>
             </div>
         </div>
         <div id="main-content">
@@ -43,7 +43,7 @@
                         <li>
                             <i>Posted on {{review.created_at}}</i>
                             {% if review.reviewer.id == request.session.current_user_id %}
-                                <form action="/review" method="POST">
+                                <form action="{{book.id}}/reviews/{{review.id}}" method="POST">
                                     {% csrf_token %}
                                     <input type="hidden" name="delete" value={{review.id}}>
                                     <input type="submit" value="Delete this Review">
@@ -51,22 +51,32 @@
                             {% endif %}
                         </li>
                     </ul>
+                    {% empty %}
+                        <h4>No reviews yet!</h4>
                 {% endfor %}
             </div>
 
-            <form id="add-review" action="/reviews" method="POST">
+            <form id="add-review" action="{{book.id}}/reviews" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="url" value="/{{book.id}}">
                 <label for="form-add-review">Add a Review:</label>
-                <textarea name="review" id="form-add-revuew" cols="30" rows="10"></textarea>
+                <textarea name="text" id="form-add-revuew" cols="30" rows="10"></textarea>
                 <label for="form-rating">Rating:</label>
                 <input id="form-star-rating" name="rating" type="hidden" value="3">
-                <div class="star-rating">
+                <div class="star-rating edit">
                     <img class="star" value="1" src="{% static 'img/filled_star.png' %}" alt="star">
                     <img class="star" value="2" src="{% static 'img/filled_star.png' %}" alt="star">
                     <img class="star" value="3" src="{% static 'img/filled_star.png' %}" alt="star">
                     <img class="star" value="4" src="{% static 'img/empty_star.png' %}">
                     <img class="star" value="5" src="{% static 'img/empty_star.png' %}">
                 </div>
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{message}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <input type="submit" value="Submit Review">
             </form>
         </div>

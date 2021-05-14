@@ -169,24 +169,28 @@ $(document).ready(function(){
         return false;
     });
 
-    if (window.location.pathname == "/books/new"){
+        console.log("Hovering in editing field")
         $('.star').hover(function(){
             //Hover in
-            drawStars($(this).attr('value'));
+            if ($(this).parent().hasClass('edit')){
+                drawStars($(this).attr('value'));
+            }
         },function(){
             //Hover out
-            drawStars($('#form-star-rating').attr('value'))           
+            if ($(this).parent().hasClass('edit')){
+                drawStars($('#form-star-rating').attr('value'))           
+            }
         });
-
+    
         $('.star').click(function(){
             console.log("Star clicked")
             $('#form-star-rating').val($(this).attr('value'))
         });
-    }
+
 
 
     function drawStars(rating){
-        $('.star').each(function(){
+        $('.edit').children('.star').each(function(){
             $(this).attr('src', "/static/img/empty_star.png")
         });
         for( var i=1; i<=rating; i++ ){
